@@ -24,11 +24,15 @@ public class RailRoadCell extends Cell {
 	public Boolean playAction(String msg) {
 		Player currentPlayer = null;
 		if(!isAvailable()) {
-			currentPlayer = GameMaster.instance().getCurrentPlayer();
-			if(theOwner != currentPlayer) {
-				currentPlayer.payRentTo(theOwner, getRent());
-			}
+			currentPlayer(currentPlayer);
 		}
 		return null;
+	}
+
+	private void currentPlayer(Player currentPlayer) {
+		currentPlayer = GameMaster.instance().getCurrentPlayer();
+		if (theOwner != currentPlayer) {
+			currentPlayer.payRentTo(theOwner, getRent());
+		}
 	}
 }

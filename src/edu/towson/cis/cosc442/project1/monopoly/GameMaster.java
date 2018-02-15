@@ -120,11 +120,16 @@ public class GameMaster {
     }
 
     public void completeTrade(TradeDeal deal) {
-        Player seller = getPlayer(deal.getPlayerIndex());
-        Cell property = gameBoard.queryCell(deal.getPropertyName());
-        seller.sellProperty(property, deal.getAmount());
-        getCurrentPlayer().buyProperty(property, deal.getAmount());
+        Cell property = property(deal);
+		getCurrentPlayer().buyProperty(property, deal.getAmount());
     }
+
+	private Cell property(TradeDeal deal) {
+		Player seller = getPlayer(deal.getPlayerIndex());
+		Cell property = gameBoard.queryCell(deal.getPropertyName());
+		seller.sellProperty(property, deal.getAmount());
+		return property;
+	}
 
     public Card drawCCCard() {
         return gameBoard.drawCCCard();
@@ -194,16 +199,20 @@ public class GameMaster {
 	}
 	
 	public void movePlayer(Player player, int diceValue) {
+		gui(player, diceValue);
+		updateGUI();
+	}
+
+	private void gui(Player player, int diceValue) {
 		Cell currentPosition = player.getPosition();
 		int positionIndex = gameBoard.queryCellIndex(currentPosition.getName());
-		int newIndex = (positionIndex+diceValue)%gameBoard.getCellNumber();
-		if(newIndex <= positionIndex || diceValue > gameBoard.getCellNumber()) {
+		int newIndex = (positionIndex + diceValue) % gameBoard.getCellNumber();
+		if (newIndex <= positionIndex || diceValue > gameBoard.getCellNumber()) {
 			player.setMoney(player.getMoney() + 200);
 		}
 		player.setPosition(gameBoard.getCell(newIndex));
 		gui.movePlayer(getPlayerIndex(player), positionIndex, newIndex);
 		playerMoved(player);
-		updateGUI();
 	}
 
 	public void playerMoved(Player player) {
