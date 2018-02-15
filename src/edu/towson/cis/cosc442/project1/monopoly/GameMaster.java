@@ -120,18 +120,11 @@ public class GameMaster {
     }
 
     public void completeTrade(TradeDeal deal) {
-        Cell property = property(deal);
+        Cell property = deal.property(gameBoard, this);
 		getCurrentPlayer().buyProperty(property, deal.getAmount());
     }
 
-	private Cell property(TradeDeal deal) {
-		Player seller = getPlayer(deal.getPlayerIndex());
-		Cell property = gameBoard.queryCell(deal.getPropertyName());
-		seller.sellProperty(property, deal.getAmount());
-		return property;
-	}
-
-    public Card drawCCCard() {
+	public Card drawCCCard() {
         return gameBoard.drawCCCard();
     }
 
